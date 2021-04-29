@@ -10,3 +10,5 @@ app.get("/", (req, res) => {
 });
 
 app.use(homeController.logRequestPaths);
+
+app.post("/sign_up", homeController.userSignUpProcessor);
