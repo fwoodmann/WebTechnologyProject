@@ -3,9 +3,9 @@ exports.logRequestPaths = (req, res, next) => {
     next();
    };
 
-exports.logPort = (req, res) => {
-    res.send("Hello, Universe!");
-  }
+exports.respondWebsite = (req,res) =>{
+  res.render("index");
+}
 
 exports.userSignUpProcessor = (req, res) => {
     console.log(req.body);
