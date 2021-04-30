@@ -4,5 +4,5 @@ exports.logRequestPaths = (req, res, next) => {
  };
 
 exports.respondWebsite = (req, res) => {
-  res.send("Hello, feed!");
+  res.render("feed");
 }
