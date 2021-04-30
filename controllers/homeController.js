@@ -3,7 +3,7 @@ exports.logRequestPaths = (req, res, next) => {
     next();
    };
 
-exoports.logPort = (req, res) => {
+exports.logPort = (req, res) => {
     res.send("Hello, Universe!");
   }
 
