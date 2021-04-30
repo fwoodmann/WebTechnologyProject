@@ -3,6 +3,7 @@ const errorController = require("./controllers/errorController");
 const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
 const express = require("express"),
+  path = require("path"),
   app = express(),
   layouts = require("express-ejs-layouts");
 
@@ -24,7 +25,7 @@ app.get("/profile", profileController.respondWebsite);
 app.get("/profile/:id", profileController.respondWebsite);
 app.get("/", homeController.respondWebsite);
 app.post("/sign_up", homeController.userSignUpProcessor);
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);
 app.use(errorController.respondNoResourceFound);

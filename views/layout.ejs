@@ -1,5 +1,44 @@
+<%# Bootstrap style sheet %>
+<link href="/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
 <body>
-  <div id="nav">NAVIGATION</div>
-  <%- body %>
-  <div id="footer">FOOTER</div>
+  <div id="nav">
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+      <a class="navbar-brand" href="#">Social Media Website </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="#">Profile</a>
+          <a class="nav-item nav-link" href="#">Feed</a>
+        </div>
+      </div>
+      <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </nav>
+  </div>
+  </nav>
+  </div>
+
+  <main> <%- body %> </main>
+  <div class="fixed-bottom">
+    <footer class="bg-light text-center text-lg-start">
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.4);">
+        © 2021 Copyright:
+        <a class="text-dark" href="localhost:3000">Index</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+  </div>
 </body>
+
+<%# Bootstrap style sheet %>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="/js/bootstrap.js"></script>
