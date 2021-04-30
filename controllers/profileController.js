@@ -5,5 +5,6 @@ exports.logRequestPaths = (req, res, next) => {
  };
 
 exports.respondWebsite = (req, res) => {
-  res.render("profile");
+  let userId = req.params.id; 
+  res.render("profile",{id: userId});
 }

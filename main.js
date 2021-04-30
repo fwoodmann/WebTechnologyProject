@@ -15,6 +15,7 @@ const express = require("express"),
 
 app.get("/feed", feedController.respondWebsite);
 app.get("/profile", profileController.respondWebsite);
+app.get("/profile/:id", profileController.respondWebsite);
 app.get("/",homeController.respondWebsite);
 app.post("/sign_up", homeController.userSignUpProcessor);
 
