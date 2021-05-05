@@ -2,6 +2,25 @@ const homeController = require("./controllers/homeController");
 const errorController = require("./controllers/errorController");
 const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
+const user = require("./models/user");
+require('dotenv').config();
+dbUrl = process.env.dbUrl || "mongodb://localhost:27017/socialMedia_db";
+
+const mongoose = require("mongoose");
+mongoose.connect(
+  dbUrl, {
+    useNewUrlParser: true
+  }, {
+    useUnifiedTopology: true
+  }
+);
+const db = mongoose.connection;
+
+db.once("open", () => {
+  console.log("Successfully connected to MongoDB using Mongoose!");
+});
+
+
 const express = require("express"),
   path = require("path"),
   app = express(),
@@ -27,9 +46,7 @@ app.get("/feed", feedController.respondWebsite);
 app.get("/profile", profileController.respondWebsite);
 app.get("/profile/:id", profileController.respondWebsite);
 app.get("/", homeController.respondWebsite);
-app.post("/sign_up", homeController.userSignUpProcessor);
-app.get("/signup", profileController.renderSignUp);
-app.get("/signup:candidateid", profileController.renderSignUp);
+app.post("/signup", profileController.signUpUser);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);
