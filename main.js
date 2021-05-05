@@ -25,6 +25,8 @@ app.get("/profile", profileController.respondWebsite);
 app.get("/profile/:id", profileController.respondWebsite);
 app.get("/", homeController.respondWebsite);
 app.post("/sign_up", homeController.userSignUpProcessor);
+app.get("/signup", profileController.renderSignUp);
+app.get("/signup:candidateid", profileController.renderSignUp);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);
