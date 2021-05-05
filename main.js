@@ -20,6 +20,9 @@ if (port == null || port == "") {
 app.set("port", port);
 app.use(layouts)
 
+app.get("/signup", profileController.getSignUpPage);
+app.post("/profile", profileController.saveUser);
+
 app.get("/feed", feedController.respondWebsite);
 app.get("/profile", profileController.respondWebsite);
 app.get("/profile/:id", profileController.respondWebsite);

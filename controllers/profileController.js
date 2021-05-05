@@ -14,3 +14,14 @@ exports.renderSignUp = (req, res) => {
     id: req.params.id,
   });
 };
+
+exports.getSignUpPage = (req, res) => {
+res.render("signup");
+};
+
+exports.saveUser = (req, res) => {
+  let newUser = new user({
+    username: req.body.username,
+    email: req.body.email
+  });
+};
