@@ -5,24 +5,35 @@ on:
     branches:
       - main
 
-jobs:
-  build:
-
+ cypress-run:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup npm package
+        run: npm install
+      - name: Build website
+        run: npm build
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Jest unit testing
+        uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      - name: Run Jest
+        run: npm run jest
 
-    strategy:
-      matrix:
-        node-version: [13.x]
-
+  heroku:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
     - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
