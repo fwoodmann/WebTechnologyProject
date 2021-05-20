@@ -32,8 +32,8 @@ jobs:
 
   heroku:
     runs-on: ubuntu-latest
+    needs: [jest, cypress-run]
     steps:
-      needs: [jest,cypress-run]
     - uses: actions/checkout@v2
     - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
       with:
