@@ -4,7 +4,10 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "run": "npm main.js",
+    "start": "node main.js",
+    "cypress": "cypress open",
+    "jest": "jest",
+    "coverage": "jest --coverage",
     "run dev": "nodemon main.js",
     "mongo": "docker-compose up -d",
     "mongobash": "docker-compose exec mongo bash",
@@ -38,5 +41,13 @@
     "nodemon": "^2.0.7",
     "superagent": "^6.1.0",
     "supertest": "^6.1.3"
+  },
+  "jest": {
+    "verbose": true,
+    "modulePathIgnorePatterns": [
+      "cypress"
+    ],
+    "testEnvironment": "node",
+    "preset": "@shelf/jest-mongodb"
   }
 }
