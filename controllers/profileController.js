@@ -1,18 +1,6 @@
 httpStatus = require('http-status-codes')
 const User = require("../models/user");
 
-const getUserParams = body => {
-  return {
-    name: {
-      first: body.first || (body.name && body.name.first),
-      last: body.last || (body.name && body.name.last)
-    },
-    username: body.username,
-    email: body.email,
-    password: body.password
-  }
-}
-
 module.exports = {
   index: (req, res) => {
     User.find({})

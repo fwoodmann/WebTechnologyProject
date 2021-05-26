@@ -42,7 +42,7 @@ app.use(layouts)
 
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
-app.get("/signup",profileController.create, profileController.redirectView);
+app.post("/signup",profileController.create, profileController.redirectView);
 
 app.get("/feed", feedController.respondWebsite);
 app.get("/", homeController.respondWebsite);
