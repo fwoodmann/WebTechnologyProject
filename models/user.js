@@ -34,6 +34,11 @@ const UserSchema = mongoose.Schema({
     timestamps: true
 });
 
+UserSchema.virtual("fullName")
+    .get(function() {
+        return `${this.name.first} ${this.name.last}`;
+    });
+
 UserSchema.methods.findUser = function () {
     return this.model("User").find({
         username: this.username
