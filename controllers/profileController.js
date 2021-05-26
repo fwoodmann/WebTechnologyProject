@@ -1,42 +1,62 @@
+httpStatus = require('http-status-codes')
 const User = require("../models/user");
-exports.logRequestPaths = (req, res, next) => {
-  console.log(`request made to: ${req.url}`);
-  next();
-};
 
-exports.respondWebsite = (req, res) => {
-  res.render("profile", {
-    id: req.params.id,
-  });
+const getUserParams = body => {
+  return {
+    name: {
+      first: body.first || (body.name && body.name.first),
+      last: body.last || (body.name && body.name.last)
+    },
+    username: body.username,
+    email: body.email,
+    password: body.password
+  }
 }
 
-exports.renderSignUp = (req, res) => {
-  res.render("signup", {
-    id: req.params.id,
-  });
-};
+module.exports = {
+  index: (req, res) => {
+    User.find({})
+      .then(users => {
+        res.locals.users = users;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error fetching users: ${error.message}`);
+        next(error);
+      })
+  },
+  indexView: (req, res) => {
+    res.render("profile");
+  },
 
-exports.getSignUpPage = (req, res) => {
-  res.render("signup");
-};
+  new: (req, res) => {
+    res.render("signup");
+  },
+  create: (req, res, next) => {
+    let userParams = {
+      name: {
+        first: req.body.first,
+        last: req.body.last
+      },
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    };
 
-exports.saveUser = (req, res) => {
-  let newUser = new user({
-    username: req.body.username,
-    email: req.body.email
-  });
-};
+    User.create(userParams)
+      .then(user => {
+        res.locals.redirect = "/profile";
+        res.local.user = user;
+        next();
+      }).catch(error => {
+        console.log(`Errir savubg zser: ${error.message}`);
+        next(error);
+      });
+  },
 
-exports.signUpUser = (req, res) => {
-  let newUser = new User({
-    id: req.params.id,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  });
-  newUser.save().then(() => {
-    res.render("index");
-  }).catch(error => {
-    res.send(error);
-  });
-};
+  redirectView: (req, res, next) => {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath) res.redirect(redirectPath);
+    else next();
+  }
+}

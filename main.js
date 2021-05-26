@@ -7,6 +7,7 @@ require('dotenv').config();
 dbUrl = process.env.dbUrl || "mongodb://localhost:27017/socialMedia_db";
 
 const mongoose = require("mongoose");
+const { Router } = require("express");
 mongoose.connect(
   dbUrl, {
     useNewUrlParser: true
@@ -39,14 +40,12 @@ if (port == null || port == "") {
 app.set("port", port);
 app.use(layouts)
 
-app.get("/signup", profileController.getSignUpPage);
-app.post("/profile", profileController.saveUser);
+app.get("/profile", profileController.indexView);
+app.get("/signup", profileController.new);
+app.get("/signup",profileController.create, profileController.redirectView);
 
 app.get("/feed", feedController.respondWebsite);
-app.get("/profile", profileController.respondWebsite);
-app.get("/profile/:id", profileController.respondWebsite);
 app.get("/", homeController.respondWebsite);
-app.post("/signup", profileController.signUpUser);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);
