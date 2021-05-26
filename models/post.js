@@ -8,6 +8,9 @@ const postSchema = mongoose.Schema({
     context:{
         type: String,
         required: true
+    },
+    linked:{
+        type: String
     }, 
     comments:{
         type: String,
