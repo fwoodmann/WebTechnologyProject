@@ -13,4 +13,5 @@ const seedUsers = [{
     email: "Test3@test.de",
     password: "1234"
   }
-];
+]
+module.exports = seedUsers;
