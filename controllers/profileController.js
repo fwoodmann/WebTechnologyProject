@@ -49,7 +49,7 @@ module.exports = {
         res.local.user = user;
         next();
       }).catch(error => {
-        console.log(`Errir savubg zser: ${error.message}`);
+        console.log(`Error saving user: ${error.message}`);
         next(error);
       });
   },
