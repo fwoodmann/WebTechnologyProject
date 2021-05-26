@@ -34,7 +34,7 @@ module.exports = {
     User.create(userParams)
       .then(user => {
         res.locals.redirect = "/profile";
-        res.local.user = user;
+        res.locals.user = user;
         next();
       }).catch(error => {
         console.log(`Error saving user: ${error.message}`);
