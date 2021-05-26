@@ -20,15 +20,15 @@ jobs:
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-  jest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Jest unit testing
-        uses: actions/checkout@v2
-      - name: Install modules
-        run: npm install
-      - name: Run Jest
-        run: npm run jest
+  # jest:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Jest unit testing
+  #       uses: actions/checkout@v2
+  #     - name: Install modules
+  #       run: npm install
+  #     - name: Run Jest
+  #       run: npm run jest
 
   heroku:
     runs-on: ubuntu-latest
