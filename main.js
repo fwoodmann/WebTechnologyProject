@@ -44,6 +44,8 @@ app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
 app.post("/signup",profileController.create, profileController.redirectView);
 
+app.get("/profile/:id", profileController.show, profileController.showView);
+
 app.get("/feed", feedController.respondWebsite);
 app.get("/", homeController.respondWebsite);
 app.use(express.static(path.join(__dirname, 'public')));
