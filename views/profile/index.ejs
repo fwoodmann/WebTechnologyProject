@@ -28,7 +28,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  id
+                  <%= user._id %>
                 </td>
               </tr>
               <tr>
@@ -39,7 +39,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  Test
+                  <%= user.name.first %>
                 </td>
               </tr>
               <tr>
@@ -50,7 +50,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  Test
+                  <%= user.name.last %>
                 </td>
               </tr>
 
@@ -62,7 +62,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  Test
+                  <%= user.username %>
                 </td>
               </tr>
 
@@ -86,7 +86,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  Test
+                  <%= user.email %>
                 </td>
               </tr>
               <tr>
@@ -97,7 +97,7 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  today
+                  <%= user.createdAt %>
                 </td>
               </tr>
               <tr>
@@ -108,14 +108,14 @@
                   </strong>
                 </td>
                 <td class="text-primary">
-                  now
+                  <%= user.updatedAt %>
                 </td>
               </tr>
             </tbody>
           </table>
           <div class="control-group">
             <div class="controls">
-              <a class="btn btn-secondary btn-lg active" role="button" href="/profile/edit">
+              <a class="btn btn-secondary btn-lg active" role="button" href="<%=`/profile/${user._id}/edit`%>">
               Edit
               </a>
             </div>

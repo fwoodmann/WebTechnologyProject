@@ -44,8 +44,9 @@ app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
 app.post("/signup",profileController.create, profileController.redirectView);
 
-app.get("/profile/edit", profileController.edit)
+app.get("/profile/:id/edit", profileController.edit)
 app.get("/profile/:id", profileController.show, profileController.showView);
+app.put("profile/:id", profileController.update, profileController.redirectView)
 
 app.get("/feed", feedController.respondWebsite);
 app.get("/", homeController.respondWebsite);

@@ -66,7 +66,7 @@ module.exports = {
   },
 
   showView: (req, res) => {
-    res.render("profile");
+    res.render("profile/index");
   },
 
   edit: (req, res, next) => {
@@ -98,5 +98,5 @@ module.exports = {
         next(error)
       })
   },
-  
+
 }
