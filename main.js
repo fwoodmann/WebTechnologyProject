@@ -53,7 +53,7 @@ app.post("/signup",profileController.create, profileController.redirectView);
 
 app.get("/profile/:id/edit", profileController.edit)
 app.get("/profile/:id", profileController.show, profileController.showView);
-app.put("profile/:id", profileController.update, profileController.redirectView)
+app.put("/profile/:id/update", profileController.update, profileController.redirectView)
 
 app.get("/feed", feedController.respondWebsite);
 app.get("/", homeController.respondWebsite);

@@ -1,5 +1,5 @@
 <div class="data-form">
-  <form class="form-update" method="POST" action="<%=`/profile/${user._id}?_method=PUT`%>">
+  <form class="form-update" method="POST" action="<%=`/profile/${user._id}/update?_method=PUT`%>">
     <h2 class="form-update-heading">Edit user:</h2>
     <label for="inputUsername">Username</label>
     <input type="text" name="username" id="inputUserName" class="form-control" value="<%= user.username %>"
