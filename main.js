@@ -4,6 +4,9 @@ const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
 const user = require("./models/user");
 const methodOverride = require('method-override')
+const expressSession = require("express-session"),
+  cookieParser = require("cookie-parser"),
+  connectFlash = require("connect-flash");
 
 
 require('dotenv').config();
@@ -30,6 +33,16 @@ const express = require("express"),
   app = express(),
   layouts = require("express-ejs-layouts");
 
+app.use(cookieParser("secres_passcode"));
+app.use(expressSession({
+  secret: "secret_passcode",
+  cookie: {
+    maxAge: 4000000
+  },
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(connectFlash());
 app.use(express.urlencoded({
   extended: false
 }));
