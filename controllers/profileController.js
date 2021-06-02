@@ -96,4 +96,17 @@ module.exports = {
       })
   },
 
+  delete: (req, res, next) => {
+    const userId = req.params.id
+    User.findByIdAndRemove(userId)
+      .then(() => {
+        res.locals.redirect = "/"
+        next()
+      })
+      .catch(error => {
+        console.log(`Error deleting user by ID: ${error.message}`)
+        next()
+      })
+  },
+
 }

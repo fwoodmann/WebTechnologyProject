@@ -55,6 +55,8 @@ app.get("/profile/:id/edit", profileController.edit)
 app.get("/profile/:id", profileController.show, profileController.showView);
 app.put("/profile/:id/update", profileController.update, profileController.redirectView)
 
+app.delete("/profile/:id/delete", profileController.delete, profileController.redirectView)
+
 app.get("/feed", feedController.respondWebsite);
 app.get("/", homeController.respondWebsite);
 app.use(express.static(path.join(__dirname, 'public')));
