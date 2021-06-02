@@ -1,16 +1,6 @@
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
-    name: {
-        first: {
-            type: String,
-            trim: true
-        },
-        last: {
-            type: String,
-            trim: true
-        }
-    },
     username: {
         type: String,
         required: true
@@ -28,11 +18,6 @@ const UserSchema = mongoose.Schema({
 }, {
     timestamps: true
 });
-
-UserSchema.virtual("fullName")
-    .get(function() {
-        return `${this.name.first} ${this.name.last}`;
-    });
 
 UserSchema.methods.findUser = function () {
     return this.model("User").find({
