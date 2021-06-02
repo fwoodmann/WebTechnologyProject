@@ -33,7 +33,7 @@ module.exports = {
 
     User.create(userParams)
       .then(user => {
-        res.locals.redirect = "/profile";
+        res.locals.redirect = "/";
         res.locals.user = user;
         next();
       }).catch(error => {
