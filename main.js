@@ -3,6 +3,9 @@ const errorController = require("./controllers/errorController");
 const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
 const user = require("./models/user");
+const methodOverride = require('method-override')
+
+
 require('dotenv').config();
 dbUrl ="mongodb://localhost:27017/socialMedia_db"; // process.env.dbUrl || 
 
@@ -39,6 +42,11 @@ if (port == null || port == "") {
 }
 app.set("port", port);
 app.use(layouts)
+
+const methodOverride = require("method-override");
+router.use(methodOverride("_method", {
+ methods: ["POST", "GET"]
+}));
 
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
