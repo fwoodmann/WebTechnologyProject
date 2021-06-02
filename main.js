@@ -3,10 +3,14 @@ const errorController = require("./controllers/errorController");
 const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
 const user = require("./models/user");
+const methodOverride = require('method-override')
+
+
 require('dotenv').config();
-dbUrl = process.env.dbUrl || "mongodb://localhost:27017/socialMedia_db";
+dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
 
 const mongoose = require("mongoose");
+const { Router } = require("express");
 mongoose.connect(
   dbUrl, {
     useNewUrlParser: true
@@ -39,14 +43,22 @@ if (port == null || port == "") {
 app.set("port", port);
 app.use(layouts)
 
-app.get("/signup", profileController.getSignUpPage);
-app.post("/profile", profileController.saveUser);
+app.use(methodOverride("_method", {
+ methods: ["POST", "GET"]
+}));
+
+app.get("/profile", profileController.indexView);
+app.get("/signup", profileController.new);
+app.post("/signup",profileController.create, profileController.redirectView);
+
+app.get("/profile/:id/edit", profileController.edit)
+app.get("/profile/:id", profileController.show, profileController.showView);
+app.put("/profile/:id/update", profileController.update, profileController.redirectView)
+
+app.delete("/profile/:id/delete", profileController.delete, profileController.redirectView)
 
 app.get("/feed", feedController.respondWebsite);
-app.get("/profile", profileController.respondWebsite);
-app.get("/profile/:id", profileController.respondWebsite);
 app.get("/", homeController.respondWebsite);
-app.post("/signup", profileController.signUpUser);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);

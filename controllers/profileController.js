@@ -1,42 +1,112 @@
+httpStatus = require('http-status-codes')
 const User = require("../models/user");
-exports.logRequestPaths = (req, res, next) => {
-  console.log(`request made to: ${req.url}`);
-  next();
-};
 
-exports.respondWebsite = (req, res) => {
-  res.render("profile", {
-    id: req.params.id,
-  });
+const getUserParams = body => {
+  return {
+    username: body.username,
+    email: body.email,
+    password: body.password
+  }
 }
 
-exports.renderSignUp = (req, res) => {
-  res.render("signup", {
-    id: req.params.id,
-  });
-};
+module.exports = {
+  index: (req, res) => {
+    User.find({})
+      .then(users => {
+        res.locals.users = users;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error fetching users: ${error.message}`);
+        next(error);
+      })
+  },
+  indexView: (req, res) => {
+    res.render("profile/index");
+  },
 
-exports.getSignUpPage = (req, res) => {
-  res.render("signup");
-};
+  new: (req, res) => {
+    res.render("signup");
+  },
+  create: (req, res, next) => {
+    let userParams = getUserParams(req.body)
 
-exports.saveUser = (req, res) => {
-  let newUser = new user({
-    username: req.body.username,
-    email: req.body.email
-  });
-};
+    User.create(userParams)
+      .then(user => {
+        res.locals.redirect = "/";
+        res.locals.user = user;
+        next();
+      }).catch(error => {
+        console.log(`Error saving user: ${error.message}`);
+        next(error);
+      });
+  },
 
-exports.signUpUser = (req, res) => {
-  let newUser = new User({
-    id: req.params.id,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  });
-  newUser.save().then(() => {
-    res.render("index");
-  }).catch(error => {
-    res.send(error);
-  });
-};
+  redirectView: (req, res, next) => {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
+  },
+
+  show: (req, res, next) => {
+    let userId = req.params.id;
+    User.findById(userId)
+      .then(user => {
+        res.locals.user = user;
+          next();
+      })
+      .catch(error => {
+        console.log(`Error fetching user by ID:${error.message}`);
+        next(error);
+      });
+  },
+
+  showView: (req, res) => {
+    res.render("profile/index");
+  },
+
+  edit: (req, res, next) => {
+    const userId = req.params.id
+    User.findById(userId)
+      .then(user => {
+        res.render('profile/edit', {
+          user: user
+        })
+      })
+      .catch(error => {
+        console.log(`Error fetching user by ID: ${error.message}`)
+        next(error)
+      })
+  },
+
+  update: (req, res, next) => {
+    const userId = req.params.id
+    const userParams = getUserParams(req.body)
+    User.findByIdAndUpdate(userId, {
+      $set: userParams
+    })
+      .then(user => {
+        res.locals.redirect = `/profile/${userId}`
+        res.locals.user = user;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error updating user by ID: ${error.message}`)
+        next(error)
+      })
+  },
+
+  delete: (req, res, next) => {
+    const userId = req.params.id
+    User.findByIdAndRemove(userId)
+      .then(() => {
+        res.locals.redirect = "/"
+        next()
+      })
+      .catch(error => {
+        console.log(`Error deleting user by ID: ${error.message}`)
+        next()
+      })
+  },
+
+}
