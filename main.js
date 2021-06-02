@@ -7,7 +7,7 @@ const methodOverride = require('method-override')
 
 
 require('dotenv').config();
-dbUrl ="mongodb://localhost:27017/socialMedia_db"; // process.env.dbUrl || 
+dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
