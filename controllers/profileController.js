@@ -44,7 +44,7 @@ module.exports = {
 
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath) res.redirect(redirectPath);
+    if (redirectPath !== undefined) res.redirect(303, redirectPath);
     else next();
   },
 
@@ -82,7 +82,6 @@ module.exports = {
   update: (req, res, next) => {
     const userId = req.params.id
     const userParams = getUserParams(req.body)
-
     User.findByIdAndUpdate(userId, {
       $set: userParams
     })
