@@ -4,7 +4,7 @@ const feedController = require("./controllers/feedController");
 const profileController = require("./controllers/profileController");
 const user = require("./models/user");
 require('dotenv').config();
-dbUrl = process.env.dbUrl || "mongodb://localhost:27017/socialMedia_db";
+dbUrl ="mongodb://localhost:27017/socialMedia_db"; // process.env.dbUrl || 
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
@@ -44,6 +44,7 @@ app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
 app.post("/signup",profileController.create, profileController.redirectView);
 
+app.get("/profile/edit", profileController.edit)
 app.get("/profile/:id", profileController.show, profileController.showView);
 
 app.get("/feed", feedController.respondWebsite);

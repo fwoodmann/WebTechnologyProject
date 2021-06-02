@@ -1,6 +1,18 @@
 httpStatus = require('http-status-codes')
 const User = require("../models/user");
 
+const getUserParams = body => {
+  return {
+    name: {
+      first: req.body.first,
+      last: req.body.last
+    },
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password
+  }
+}
+
 module.exports = {
   index: (req, res) => {
     User.find({})
@@ -14,22 +26,14 @@ module.exports = {
       })
   },
   indexView: (req, res) => {
-    res.render("profile");
+    res.render("profile/index");
   },
 
   new: (req, res) => {
     res.render("signup");
   },
   create: (req, res, next) => {
-    let userParams = {
-      name: {
-        first: req.body.first,
-        last: req.body.last
-      },
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password
-    };
+    let userParams = getUserParams(req.body)
 
     User.create(userParams)
       .then(user => {
@@ -63,5 +67,36 @@ module.exports = {
 
   showView: (req, res) => {
     res.render("profile");
-  }
+  },
+
+  edit: (req, res, next) => {
+    const userId = req.params.id
+    User.findById(userId)
+      .then(user => {
+        res.render('profile/edit', {
+          user: user
+        })
+      })
+      .catch(error => {
+        console.log(`Error fetching user by ID: ${error.message}`)
+        next(error)
+      })
+  },
+
+  update: (req, res, next) => {
+    const userId = req.params.id
+    const userParams = getUserParams(req.body)
+
+    User.updateOne({_id: userId }, userParams)
+      .then( user => {
+        res.locals.redirect = `profile/${userId}`
+        res.locals.user = user
+        next()
+      })
+      .catch(error => {
+        console.log(`Error updating user by ID: ${error.message}`)
+        next(error)
+      })
+  },
+  
 }
