@@ -43,8 +43,7 @@ if (port == null || port == "") {
 app.set("port", port);
 app.use(layouts)
 
-const methodOverride = require("method-override");
-router.use(methodOverride("_method", {
+app.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 

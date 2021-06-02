@@ -4,12 +4,12 @@ const User = require("../models/user");
 const getUserParams = body => {
   return {
     name: {
-      first: req.body.first,
-      last: req.body.last
+      first: body.first,
+      last: body.last
     },
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
+    username: body.username,
+    email: body.email,
+    password: body.password
   }
 }
 
@@ -87,11 +87,13 @@ module.exports = {
     const userId = req.params.id
     const userParams = getUserParams(req.body)
 
-    User.updateOne({_id: userId }, userParams)
-      .then( user => {
-        res.locals.redirect = `profile/${userId}`
-        res.locals.user = user
-        next()
+    User.findByIdAndUpdate(userId, {
+      $set: userParams
+    })
+      .then(user => {
+        res.locals.redirect = `/profile/${userId}`
+        res.locals.user = user;
+        next();
       })
       .catch(error => {
         console.log(`Error updating user by ID: ${error.message}`)
