@@ -65,6 +65,9 @@ app.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 
+app.get("/", profileController.login);
+app.get("/", profileController.authenticate, profileController.redirectView)
+
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
 app.post("/signup",profileController.create, profileController.redirectView);
