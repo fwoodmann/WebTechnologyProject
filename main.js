@@ -65,8 +65,10 @@ app.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 
+app.get("/", homeController.respondWebsite);
+
 app.get("/", profileController.login);
-app.get("/", profileController.authenticate, profileController.redirectView)
+app.post("/", profileController.authenticate, profileController.redirectView)
 
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
@@ -79,7 +81,6 @@ app.put("/profile/:id/update", profileController.update, profileController.redir
 app.delete("/profile/:id/delete", profileController.delete, profileController.redirectView)
 
 app.get("/feed", feedController.respondWebsite);
-app.get("/", homeController.respondWebsite);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorController.logErrors);

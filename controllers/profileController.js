@@ -59,7 +59,7 @@ module.exports = {
     User.findById(userId)
       .then(user => {
         res.locals.user = user;
-          next();
+        next();
       })
       .catch(error => {
         console.log(`Error fetching user by ID:${error.message}`);
@@ -89,8 +89,8 @@ module.exports = {
     const userId = req.params.id
     const userParams = getUserParams(req.body)
     User.findByIdAndUpdate(userId, {
-      $set: userParams
-    })
+        $set: userParams
+      })
       .then(user => {
         res.locals.redirect = `/profile/${userId}`
         res.locals.user = user;
@@ -114,5 +114,31 @@ module.exports = {
         next()
       })
   },
+
+  login: (req, res) => {
+    res.render("/");
+  },
+
+  authenticate: (req, res, next) => {
+    User.findOne({
+        email: req.body.email
+      })
+      .then(user => {
+          if (user && user.password === req.body.password) {
+            res.locals.redirect = `/profile/${user._id}`;
+            req.flash("success", `${user.username}'s logged in successfully!`);
+            res.locals.user = user;
+            next();
+          } else {
+            req.flash("error", "Your email or password is incorrect. Please try again!");
+            res.locals.redirect = "/";
+            next()
+          }
+      })
+      .catch(error => {
+        console.log(`Error logging in user: ${error.message}`);
+        next(error);
+      });
+  }
 
 }
