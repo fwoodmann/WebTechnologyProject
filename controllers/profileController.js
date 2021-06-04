@@ -28,6 +28,7 @@ module.exports = {
   new: (req, res) => {
     res.render("signup");
   },
+
   create: (req, res, next) => {
     let userParams = getUserParams(req.body)
 
@@ -92,6 +93,7 @@ module.exports = {
         $set: userParams
       })
       .then(user => {
+        req.flash("success", `${user.username}'s account changes successfully!`)
         res.locals.redirect = `/profile/${userId}`
         res.locals.user = user;
         next();
@@ -124,16 +126,16 @@ module.exports = {
         email: req.body.email
       })
       .then(user => {
-          if (user && user.password === req.body.password) {
-            res.locals.redirect = `/profile/${user._id}`;
-            req.flash("success", `${user.username}'s logged in successfully!`);
-            res.locals.user = user;
-            next();
-          } else {
-            req.flash("error", "Your email or password is incorrect. Please try again!");
-            res.locals.redirect = "/";
-            next()
-          }
+        if (user && user.password === req.body.password) {
+          res.locals.redirect = `/profile/${user._id}`;
+          req.flash("success", `${user.username}'s logged in successfully!`);
+          res.locals.user = user;
+          next();
+        } else {
+          req.flash("error", "Your email or password is incorrect. Please try again!");
+          res.locals.redirect = "/";
+          next()
+        }
       })
       .catch(error => {
         console.log(`Error logging in user: ${error.message}`);
