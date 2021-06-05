@@ -7,7 +7,7 @@ const methodOverride = require('method-override')
 const expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash");
-
+const bcrypt = require("bcrypt");
 
 require('dotenv').config();
 dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
