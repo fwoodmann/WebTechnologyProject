@@ -7,10 +7,11 @@ const methodOverride = require('method-override')
 const expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash");
-  const expressValidator = require("express-validator");
+const expressValidator = require("express-validator");  //npm i express-validator@5.3.0 OTHERWISE THERE MIGHT BE ERRORS
+const passport = require("passport");
 
 require('dotenv').config();
-dbUrl ="mongodb://localhost:27017/socialMedia_db";  // process.env.dbUrl ||
+dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
@@ -42,6 +43,14 @@ app.use(expressSession({
   resave: false,
   saveUninitialized: false
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(user.createStrategy());
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+
 app.use(connectFlash());
 app.use((req, res, next) => {
   res.locals.flashMessages = req.flash();

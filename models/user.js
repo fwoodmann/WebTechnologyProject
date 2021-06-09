@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const UserSchema = mongoose.Schema({
     username: {
@@ -12,12 +13,12 @@ const UserSchema = mongoose.Schema({
         lowercase: true,
         unique: true
     },
-    password: { //password restrictions?
-        type: String,
-        required: true
-    },
 }, {
     timestamps: true
+});
+
+UserSchema.plugin(passportLocalMongoose, {
+    usernameField: "email"
 });
 
 UserSchema.methods.findUser = function () {
