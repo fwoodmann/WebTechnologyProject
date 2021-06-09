@@ -163,7 +163,7 @@ module.exports = {
         let messages = error.array().map(e => e.msg);
         req.skip = true;
         req.flash("error", messages.join(" and "));
-        req.locals.redirect = "/signup";
+        res.locals.redirect = "/signup";
         next();
       } else {
         next();

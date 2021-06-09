@@ -10,7 +10,7 @@ const expressSession = require("express-session"),
   const expressValidator = require("express-validator");
 
 require('dotenv').config();
-dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
+dbUrl ="mongodb://localhost:27017/socialMedia_db";  // process.env.dbUrl ||
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
