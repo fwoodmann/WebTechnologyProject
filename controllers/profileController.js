@@ -1,4 +1,5 @@
 httpStatus = require('http-status-codes')
+const passport = require('passport');
 const User = require("../models/user");
 
 const getUserParams = body => {
@@ -28,18 +29,22 @@ module.exports = {
   new: (req, res) => {
     res.render("signup");
   },
-  create: (req, res, next) => {
-    let userParams = getUserParams(req.body)
 
-    User.create(userParams)
-      .then(user => {
+  create: (req, res, next) => {
+   
+    let newUser = new User( getUserParams(req.body) );
+
+    User.register(newUser, req.body.password, (error, user) => {
+      if(user) {
+        req.flash("success", `${user.username}'s account created successfully!`);
         res.locals.redirect = "/";
-        res.locals.user = user;
         next();
-      }).catch(error => {
-        console.log(`Error saving user: ${error.message}`);
-        next(error);
-      });
+      } else { 
+        req.flash("error", `Failed to create user account because: ${error.message}.`)
+        res.locals.redirect = "/signup";
+        next();
+      }
+    })
   },
 
   redirectView: (req, res, next) => {
@@ -53,7 +58,7 @@ module.exports = {
     User.findById(userId)
       .then(user => {
         res.locals.user = user;
-          next();
+        next();
       })
       .catch(error => {
         console.log(`Error fetching user by ID:${error.message}`);
@@ -83,9 +88,10 @@ module.exports = {
     const userId = req.params.id
     const userParams = getUserParams(req.body)
     User.findByIdAndUpdate(userId, {
-      $set: userParams
-    })
+        $set: userParams
+      })
       .then(user => {
+        req.flash("success", `${user.username}'s account changes successfully!`)
         res.locals.redirect = `/profile/${userId}`
         res.locals.user = user;
         next();
@@ -100,13 +106,53 @@ module.exports = {
     const userId = req.params.id
     User.findByIdAndRemove(userId)
       .then(() => {
+        req.flash("success", `${user.username}'s account deleted successfully!`);
         res.locals.redirect = "/"
         next()
       })
       .catch(error => {
         console.log(`Error deleting user by ID: ${error.message}`)
+       req.flash("error", `Failed to delete user account because: ${error.message}`)
         next()
       })
+  },
+
+  login: (req, res) => {
+    res.render("/");
+  },
+
+  authenticate: passport.authenticate("local", {
+    failureRedirect: "/",
+    faliureFlash: "Failed to login.",
+    successRedirect: "/",
+    successFlash: "Logged in!"
+  }),
+
+  logout: (req, res, next) => {
+    req.logout();
+    req.flash("success", "You have been logged out!");
+    res.locals.redirect = "/";
+    next();
+  },
+  
+  validate: (req, res, next) => {
+    req.sanitizeBody("email").normalizeEmail({
+      all_lowercase: true
+    }).trim();
+    req.check("email", "Email is invalid").isEmail();
+    req.check("password", "Password is to short!").notEmpty().isLength({min: 4}).equals(req.body.password);
+
+    req.getValidationResult().then((error) => {
+      if (!error.isEmpty()) {
+        let messages = error.array().map(e => e.msg);
+        req.skip = true;
+        req.flash("error", messages.join(" and "));
+        res.locals.redirect = "/signup";
+        next();
+      } else {
+        next();
+      }
+    });
   },
 
 }
