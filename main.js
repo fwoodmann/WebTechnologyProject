@@ -11,7 +11,7 @@ const expressValidator = require("express-validator");  //npm i express-validato
 const passport = require("passport");
 
 require('dotenv').config();
-dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
+dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db" ;
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
@@ -54,6 +54,8 @@ passport.deserializeUser(user.deserializeUser());
 app.use(connectFlash());
 app.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
+  res.locals.loggedIn= req.isAuthenticated();
+  res.locals.currentUser = req.user;
   next();
 });
 
@@ -80,6 +82,7 @@ app.get("/", homeController.respondWebsite);
 
 app.get("/", profileController.login);
 app.post("/", profileController.authenticate, profileController.redirectView)
+app.get("/profile/logout", profileController.logout, profileController.redirectView);
 
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
@@ -90,6 +93,7 @@ app.get("/profile/:id", profileController.show, profileController.showView);
 app.put("/profile/:id/update", profileController.update, profileController.redirectView)
 
 app.delete("/profile/:id/delete", profileController.delete, profileController.redirectView)
+
 
 app.get("/feed", feedController.respondWebsite);
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,4 +1,5 @@
 httpStatus = require('http-status-codes')
+const passport = require('passport');
 const User = require("../models/user");
 
 const getUserParams = body => {
@@ -30,23 +31,20 @@ module.exports = {
   },
 
   create: (req, res, next) => {
-    let userParams = getUserParams(req.body)
+   
+    let newUser = new User( getUserParams(req.body) );
 
-    User.create(userParams)
-      .then(user => {
+    User.register(newUser, req.body.password, (error, user) => {
+      if(user) {
         req.flash("success", `${user.username}'s account created successfully!`);
         res.locals.redirect = "/";
-        res.locals.user = user;
         next();
-      }).catch(error => {
-        console.log(`Error saving user: ${error.message}`);
+      } else { 
+        req.flash("error", `Failed to create user account because: ${error.message}.`)
         res.locals.redirect = "/signup";
-        req.flash(
-          "error",
-          `Failed to create user account because: ${error.message}.`
-        );
         next();
-      });
+      }
+    })
   },
 
   redirectView: (req, res, next) => {
@@ -123,34 +121,20 @@ module.exports = {
     res.render("/");
   },
 
-  authenticate: (req, res, next) => {
-    User.findOne({ email: req.body.email })
-      .then(user => {
-        if (user) {
-          user.passwordComparison(req.body.password)
-            .then(passwordMatch => {
-              if(passwordMatch) {
-                res.locals.redirect = `/profile/${user._id}`;
-                req.flash("success", `${user.username}'s logged in successfully!`);
-                res.locals.user = user;
-              } else {
-                req.flash("error", "Your email or password is incorrect. Please try again!");
-                res.locals.redirect = "/";
-              }
-              next();
-            });      
-        } else {
-          req.flash("error", "Failed to log in user account : user account not found.");
-          res.locals.redirect = "/";
-          next();          
-        }
-      })
-      .catch(error => {
-        console.log(`Error logging in user: ${error.message}`);
-        next(error);
-      });
-  },
+  authenticate: passport.authenticate("local", {
+    failureRedirect: "/",
+    faliureFlash: "Failed to login.",
+    successRedirect: "/",
+    successFlash: "Logged in!"
+  }),
 
+  logout: (req, res, next) => {
+    req.logout();
+    req.flash("success", "You have been logged out!");
+    res.locals.redirect = "/";
+    next();
+  },
+  
   validate: (req, res, next) => {
     req.sanitizeBody("email").normalizeEmail({
       all_lowercase: true
