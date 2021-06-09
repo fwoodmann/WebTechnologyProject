@@ -149,6 +149,26 @@ module.exports = {
         console.log(`Error logging in user: ${error.message}`);
         next(error);
       });
-  }
+  },
+
+  validate: (req, res, next) => {
+    req.sanitizeBody("email").normalizeEmail({
+      all_lowercase: true
+    }).trim();
+    req.check("email", "Email is invalid").isEmail();
+    req.check("password", "Password is to short!").notEmpty().isLength({min: 4}).equals(req.body.password);
+
+    req.getValidationResult().then((error) => {
+      if (!error.isEmpty()) {
+        let messages = error.array().map(e => e.msg);
+        req.skip = true;
+        req.flash("error", messages.join(" and "));
+        req.locals.redirect = "/signup";
+        next();
+      } else {
+        next();
+      }
+    });
+  },
 
 }

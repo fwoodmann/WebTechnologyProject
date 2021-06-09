@@ -7,6 +7,7 @@ const methodOverride = require('method-override')
 const expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash");
+  const expressValidator = require("express-validator");
 
 require('dotenv').config();
 dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db"; 
@@ -47,10 +48,12 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use(express.urlencoded({
   extended: false
 }));
 app.use(express.json());
+app.use(expressValidator());
 app.set("view engine", "ejs");
 
 var port = process.env.PORT;
@@ -71,7 +74,7 @@ app.post("/", profileController.authenticate, profileController.redirectView)
 
 app.get("/profile", profileController.indexView);
 app.get("/signup", profileController.new);
-app.post("/signup",profileController.create, profileController.redirectView);
+app.post("/signup", profileController.validate, profileController.create, profileController.redirectView);
 
 app.get("/profile/:id/edit", profileController.edit)
 app.get("/profile/:id", profileController.show, profileController.showView);
