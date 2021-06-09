@@ -1,7 +1,3 @@
-const homeController = require("./controllers/homeController");
-const errorController = require("./controllers/errorController");
-const feedController = require("./controllers/feedController");
-const profileController = require("./controllers/profileController");
 const user = require("./models/user");
 const methodOverride = require('method-override')
 const expressSession = require("express-session"),
@@ -9,19 +5,6 @@ const expressSession = require("express-session"),
   connectFlash = require("connect-flash");
 const expressValidator = require("express-validator"); //npm i express-validator@5.3.0 OTHERWISE THERE MIGHT BE ERRORS
 const passport = require("passport");
-const router = require("express").Router(),
-  feedRoutes = require("./feedRoutes"),
-  profileRoutes = require("./profileRoutes"),
-  errorRoutes = require("./errorRoutes"),
-  homeRoutes = require("./homeRoutes");
-
-
-router.use("/profile", profileRoutes);
-router.use("/feed", feedRoutes);
-router.use("/", homeRoutes);
-router.use("/", errorRoutes);
-
-module.exports = router;
 
 require('dotenv').config();
 dbUrl = process.env.dbUrl || "mongodb://localhost:27017/socialMedia_db";
@@ -92,6 +75,18 @@ app.use(layouts)
 app.use(methodOverride("_method", {
   methods: ["POST", "GET"]
 }));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(require('./routes/profileRoutes'));
+app.use(require('./routes/homeRoutes'));
+app.use(require('./routes/feedRoutes'));
+app.use(require('./routes/errorRoutes'));
+
+module.exports = app;
+
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port: http://localhost:${app.get("port")}`);
