@@ -11,4 +11,8 @@ exports.userSignUpProcessor = (req, res) => {
     console.log(req.body);
     console.log(req.query);
     res.send("Contact information submitted successfully.");
-   };
+};
+
+exports.chat = (req, res) => {
+  res.render("chat");
+}

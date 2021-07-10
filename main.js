@@ -11,7 +11,8 @@ const expressValidator = require("express-validator");  //npm i express-validato
 const passport = require("passport");
 
 require('dotenv').config();
-dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db" ;
+dbUrl = "mongodb://localhost:27017/socialMedia_db" ; //local tests
+//dbUrl = process.env.dbUrl ||"mongodb://localhost:27017/socialMedia_db" ;
 
 const mongoose = require("mongoose");
 const { Router } = require("express");
@@ -79,6 +80,8 @@ app.use(methodOverride("_method", {
 }));
 
 app.get("/", homeController.respondWebsite);
+
+app.get("/chat", homeController.chat);
 
 app.get("/", profileController.login);
 app.post("/", profileController.authenticate, profileController.redirectView)
