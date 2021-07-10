@@ -105,6 +105,8 @@ app.use(errorController.logErrors);
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
-app.listen(port, () => {
+const server = app.listen(app.get("port"), () => {
   console.log(`Server running on port: http://localhost:${app.get("port")}`);
-});
+}),
+io = require("socket.io")(server);
+const chatController = require("./controllers/chatController")(io)
